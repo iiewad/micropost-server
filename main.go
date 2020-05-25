@@ -19,6 +19,7 @@ func main() {
 	v1 := r.Group("/api/v1")
 	{
 		v1.POST("/signup", user.Create)
+		v1.POST("/login", user.Login)
 	}
 	r.Run() // 监听并在 0.0.0.0:8080 上启动服务
 }

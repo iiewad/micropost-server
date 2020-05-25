@@ -7,8 +7,8 @@ import (
 	"github.com/bxcodec/faker/v3"
 	"github.com/google/uuid"
 	"github.com/iiewad/micropost-server/common"
+	"github.com/iiewad/micropost-server/utils"
 	"github.com/jinzhu/gorm"
-	"golang.org/x/crypto/bcrypt"
 )
 
 // User Model
@@ -33,7 +33,7 @@ type UserInfo struct {
 func (user *User) BeforeCreate(scope *gorm.Scope) error {
 	uuid := uuid.New().String()
 	scope.SetColumn("UUID", &uuid)
-	password, err := bcrypt.GenerateFromPassword([]byte(user.PasswordHash), bcrypt.DefaultCost)
+	password, err := utils.PasswordSecret(user.PasswordHash)
 	if err != nil {
 		return err
 	}
@@ -67,7 +67,7 @@ func UserSeed() {
 	for i := 0; i < 100; i++ {
 		uuid := faker.UUIDHyphenated()
 		password := "password"
-		passwordHash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+		passwordHash, err := utils.PasswordSecret(password)
 		if err != nil {
 			log.Fatal(err)
 		}
