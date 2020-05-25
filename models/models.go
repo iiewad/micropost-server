@@ -1,9 +1,9 @@
 package models
 
-import "github.com/iiewad/micropost-server/db"
+import "github.com/iiewad/micropost-server/common"
 
 // Init models
 func Init() {
-	db.DB.AutoMigrate(&User{})
+	common.DB.AutoMigrate(&User{})
 	// UserSeed()
 }

@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/iiewad/micropost-server/db"
+	"github.com/iiewad/micropost-server/common"
 	"github.com/iiewad/micropost-server/models"
 )
 
@@ -28,7 +28,7 @@ func Create(c *gin.Context) {
 		return
 	}
 	user := models.User{Name: registerParams.Name, Email: registerParams.Email, PasswordHash: registerParams.Password}
-	userID, err := models.AddUser(db.DB, user)
+	userID, err := models.AddUser(common.DB, user)
 
 	if err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
@@ -36,7 +36,7 @@ func Create(c *gin.Context) {
 	}
 
 	var newUser models.User
-	db.DB.Where("uuid = ?", userID).First(&newUser)
+	common.DB.Where("uuid = ?", userID).First(&newUser)
 	var userInfo models.UserInfo
 	userInfo = newUser.UserInfo()
 	c.JSON(200, gin.H{"code": 0, "msg": "success", "data": userInfo})

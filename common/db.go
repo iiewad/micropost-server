@@ -1,4 +1,4 @@
-package db
+package common
 
 import (
 	"log"
@@ -7,11 +7,8 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/mysql" // mysql
 )
 
-// DB GORM
-var DB *gorm.DB
-
-// Init DB
-func Init() {
+// DBInit *
+func DBInit() {
 	var err error
 	DB, err = gorm.Open("mysql", "root:1005@/micropost-development?charset=utf8&parseTime=True&loc=Local")
 	if err != nil {
@@ -19,7 +16,7 @@ func Init() {
 	}
 }
 
-// Close DB
-func Close() {
+// DBClose DB
+func DBClose() {
 	defer DB.Close()
 }

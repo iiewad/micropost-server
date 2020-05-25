@@ -6,7 +6,7 @@ import (
 
 	"github.com/bxcodec/faker/v3"
 	"github.com/google/uuid"
-	"github.com/iiewad/micropost-server/db"
+	"github.com/iiewad/micropost-server/common"
 	"github.com/jinzhu/gorm"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -63,7 +63,7 @@ func AddUser(tx *gorm.DB, user User) (*string, error) {
 
 // UserSeed Seed
 func UserSeed() {
-	db.DB.Unscoped().Delete(&User{})
+	common.DB.Unscoped().Delete(&User{})
 	for i := 0; i < 100; i++ {
 		uuid := faker.UUIDHyphenated()
 		password := "password"
@@ -72,6 +72,6 @@ func UserSeed() {
 			log.Fatal(err)
 		}
 		user := User{Name: faker.Name(), Email: faker.Email(), UUID: &uuid, PasswordHash: string(passwordHash)}
-		db.DB.Create(&user)
+		common.DB.Create(&user)
 	}
 }
