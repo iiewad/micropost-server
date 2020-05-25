@@ -24,9 +24,12 @@ type loginParams struct {
 	Password string `json:"password" binding:"required,max=128,min=6"`
 }
 
+var result models.Result
+
 // Login *
 func Login(c *gin.Context) {
 	var loginParams loginParams
+
 	if err := c.ShouldBindJSON(&loginParams); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 	}
@@ -49,14 +52,22 @@ func Login(c *gin.Context) {
 		tokenClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 		token, err := tokenClaims.SignedString(jwtSecret)
 		if err != nil {
-			c.JSON(500, gin.H{"code": "0", "msg": "failed"})
+			result.Code = http.StatusUnauthorized
+			result.Msg = "Failed"
+			result.Data = nil
+			c.JSON(result.Code, gin.H{"result": result})
 			return
 		}
-		c.JSON(200, gin.H{"code": "1", "msg": "success", "data": "Bearer " + token})
-	} else {
-		c.JSON(500, gin.H{"code": "0", "msg": "failed"})
+		result.Code = http.StatusOK
+		result.Msg = "Success"
+		result.Data = "Bearer" + token
+		c.JSON(result.Code, gin.H{"result": result})
 		return
+
 	}
+	result.Code = http.StatusBadRequest
+	result.Msg = "登录失败"
+	c.JSON(result.Code, gin.H{"result": result})
 }
 
 // Create User
@@ -83,5 +94,8 @@ func Create(c *gin.Context) {
 	common.DB.Where("uuid = ?", userID).First(&newUser)
 	var userInfo models.UserInfo
 	userInfo = newUser.UserInfo()
-	c.JSON(200, gin.H{"code": 0, "msg": "success", "data": userInfo})
+	result.Code = http.StatusOK
+	result.Msg = "登入成功"
+	result.Data = userInfo
+	c.JSON(result.Code, gin.H{"result": result})
 }
