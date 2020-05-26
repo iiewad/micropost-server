@@ -60,7 +60,7 @@ func Login(c *gin.Context) {
 		}
 		result.Code = http.StatusOK
 		result.Msg = "Success"
-		result.Data = "Bearer" + token
+		result.Data = "Bearer " + token
 		c.JSON(result.Code, gin.H{"result": result})
 		return
 
@@ -95,7 +95,7 @@ func Create(c *gin.Context) {
 	var userInfo models.UserInfo
 	userInfo = newUser.UserInfo()
 	result.Code = http.StatusOK
-	result.Msg = "登入成功"
+	result.Msg = "创建成功"
 	result.Data = userInfo
 	c.JSON(result.Code, gin.H{"result": result})
 }

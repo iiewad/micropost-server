@@ -12,5 +12,5 @@ type Result struct {
 // Init models
 func Init() {
 	common.DB.AutoMigrate(&User{})
-	// UserSeed()
+	common.DB.AutoMigrate(&Micropost{})
 }

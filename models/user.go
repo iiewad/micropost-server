@@ -18,6 +18,7 @@ type User struct {
 	Email        string  `gorm:"type:varchar(100);unique_index"`
 	UUID         *string `gorm:"primary_key;unique;not null"` // 设置会员号（member number）唯一并且不为空
 	PasswordHash string  `gorm:"not null"`
+	Microposts   []Micropost
 }
 
 // UserInfo Export
