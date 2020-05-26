@@ -25,6 +25,7 @@ func main() {
 	}
 	v1.Use(middleware.Auth())
 	{
+		v1.GET("/microposts", micropost.List)
 		v1.POST("/micropost", micropost.Create)
 	}
 	r.Run() // 监听并在 0.0.0.0:8080 上启动服务

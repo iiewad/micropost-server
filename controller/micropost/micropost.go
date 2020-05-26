@@ -15,6 +15,16 @@ type micropostCP struct {
 
 var result models.Result
 
+// List Micropost
+func List(c *gin.Context) {
+	var micropostList []models.Micropost
+	common.DB.Where("user_id = ?", middleware.CurrentUser.UUID).Find(&micropostList)
+	result.Code = http.StatusOK
+	result.Msg = "success"
+	result.Data = micropostList
+	c.JSON(http.StatusOK, gin.H{"result": result})
+}
+
 // Create Micropost
 func Create(c *gin.Context) {
 	var micropostCP micropostCP
