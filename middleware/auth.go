@@ -45,9 +45,9 @@ func Auth() gin.HandlerFunc {
 			context.Abort()
 			result.Msg = "token 过期" + err.Error()
 			context.JSON(http.StatusUnauthorized, gin.H{"result": result})
-		} else {
-			log.Println("Token 正确")
+			return
 		}
+		log.Println("Token 正确")
 		common.DB.Where("uuid = ?", claims.Id).First(&CurrentUser)
 		log.Println(CurrentUser)
 

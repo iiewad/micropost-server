@@ -27,6 +27,7 @@ func main() {
 	{
 		v1.GET("/microposts", micropost.List)
 		v1.POST("/micropost", micropost.Create)
+		v1.PUT("/micropost", micropost.Update)
 	}
 	r.Run() // 监听并在 0.0.0.0:8080 上启动服务
 }

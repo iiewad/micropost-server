@@ -12,8 +12,27 @@ import (
 type micropostCP struct {
 	Content string `json:"content"`
 }
+type micropostUP struct {
+	UUID    string `json:"uuid"`
+	Content string `json:"content"`
+}
 
 var result models.Result
+
+// Update Micropost
+func Update(c *gin.Context) {
+	var micropostUP micropostUP
+	if err := c.ShouldBindJSON(&micropostUP); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
+	var currentMicropost models.Micropost
+	common.DB.Where("user_id = ? AND uuid = ?", middleware.CurrentUser.UUID, micropostUP.UUID).First(&currentMicropost)
+	common.DB.Model(&currentMicropost).Update("content", &micropostUP.Content)
+	result.Code = http.StatusOK
+	result.Msg = "更新成功"
+	result.Data = currentMicropost
+	c.JSON(result.Code, gin.H{"result": result})
+}
 
 // List Micropost
 func List(c *gin.Context) {
